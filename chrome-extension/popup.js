@@ -4,6 +4,7 @@ const status = document.getElementById("status");
 
 const decodeBtn = document.getElementById("decodeBtn");
 const encodeBtn = document.getElementById("encodeBtn");
+const extractBtn = document.getElementById("extractBtn");
 const autoBtn = document.getElementById("autoBtn");
 const copyBtn = document.getElementById("copyBtn");
 const clearBtn = document.getElementById("clearBtn");
@@ -63,12 +64,33 @@ function runConversion(converter) {
   }
 }
 
+function extractNextImageUrl(value) {
+  try {
+    const parsedUrl = new URL(value);
+    const imageUrl = parsedUrl.searchParams.get("url");
+
+    if (!imageUrl) {
+      throw new Error("No image URL found in this Next.js image link.");
+    }
+
+    return imageUrl;
+  } catch (error) {
+    throw error instanceof Error
+      ? error
+      : new Error("Enter a valid Next.js image URL.");
+  }
+}
+
 decodeBtn.addEventListener("click", () => {
   runConversion((value) => decodeURIComponent(value));
 });
 
 encodeBtn.addEventListener("click", () => {
   runConversion((value) => encodeURIComponent(value));
+});
+
+extractBtn.addEventListener("click", () => {
+  runConversion((value) => extractNextImageUrl(value));
 });
 
 autoBtn.addEventListener("click", () => {

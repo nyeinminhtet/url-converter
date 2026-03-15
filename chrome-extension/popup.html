@@ -29,6 +29,7 @@
       <section class="actions">
         <button id="decodeBtn" class="button button--primary" type="button">Decode URL</button>
         <button id="encodeBtn" class="button" type="button">Encode URL</button>
+        <button id="extractBtn" class="button" type="button">Extract Image URL</button>
         <button id="autoBtn" class="button" type="button">Auto Detect &amp; Decode</button>
         <button id="copyBtn" class="button" type="button">Copy Result</button>
         <button id="clearBtn" class="button button--ghost" type="button">Clear</button>
@@ -54,6 +55,7 @@
           <li><code>%3A</code> → <code>:</code></li>
           <li><code>%2F</code> → <code>/</code></li>
           <li><code>%20</code> → <code>space</code></li>
+          <li><code>/_next/image?url=...</code> → original image URL</li>
         </ul>
       </section>
     </main>
