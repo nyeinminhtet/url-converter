@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import UrlField from "./components/url-field";
+import ActionsGroup from "./components/actions-group";
+import UrlFieldResult from "./components/url-field-result";
 
 type StatusType = "idle" | "success" | "error";
 
@@ -16,12 +19,12 @@ export default function UrlToolClient() {
   const [status, setStatus] = useState("");
   const [statusType, setStatusType] = useState<StatusType>("idle");
 
-  function showStatus(message: string, type: StatusType) {
+  const showStatus = (message: string, type: StatusType) => {
     setStatus(message);
     setStatusType(type);
-  }
+  };
 
-  function requireInput() {
+  const requireInput = () => {
     const value = input.trim();
 
     if (!value) {
@@ -31,9 +34,9 @@ export default function UrlToolClient() {
     }
 
     return value;
-  }
+  };
 
-  function handleEncode() {
+  const handleEncode = () => {
     const value = requireInput();
 
     if (!value) {
@@ -42,9 +45,9 @@ export default function UrlToolClient() {
 
     setOutput(encodeURIComponent(value));
     showStatus("URL encoded successfully.", "success");
-  }
+  };
 
-  function handleDecode() {
+  const handleDecode = () => {
     const value = requireInput();
 
     if (!value) {
@@ -58,9 +61,9 @@ export default function UrlToolClient() {
       setOutput("");
       showStatus("That input cannot be decoded.", "error");
     }
-  }
+  };
 
-  function handleAutoDecode() {
+  const handleAutoDecode = () => {
     const value = requireInput();
 
     if (!value) {
@@ -80,9 +83,9 @@ export default function UrlToolClient() {
       setOutput("");
       showStatus("Encoded text was detected, but decoding failed.", "error");
     }
-  }
+  };
 
-  function extractNextImageUrl(value: string): string {
+  const extractNextImageUrl = (value: string): string => {
     try {
       const parsedUrl = new URL(value);
       const imageUrl = parsedUrl.searchParams.get("url");
@@ -97,9 +100,9 @@ export default function UrlToolClient() {
         ? error
         : new Error("Enter a valid Next.js image URL.");
     }
-  }
+  };
 
-  function handleExtractNextImageUrl() {
+  const handleExtractNextImageUrl = () => {
     const value = requireInput();
 
     if (!value) {
@@ -116,9 +119,9 @@ export default function UrlToolClient() {
         "error",
       );
     }
-  }
+  };
 
-  async function handleCopy() {
+  const handleCopy = async () => {
     const value = output.trim();
 
     if (!value) {
@@ -132,14 +135,14 @@ export default function UrlToolClient() {
     } catch {
       showStatus("Clipboard access failed in this browser.", "error");
     }
-  }
+  };
 
-  function handleClear() {
+  const handleClear = () => {
     setInput("");
     setOutput("");
     setStatus("");
     setStatusType("idle");
-  }
+  };
 
   return (
     <main className="page">
@@ -162,66 +165,16 @@ export default function UrlToolClient() {
           </div>
         </div>
 
-        <div className="field-group">
-          <label className="field-label" htmlFor="input">
-            Input
-          </label>
-          <textarea
-            id="input"
-            className="tool-field"
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-            placeholder="Paste a URL or encoded string here..."
-            spellCheck={false}
-          />
-        </div>
-
-        <div className="actions">
-          <button
-            className="button button--primary"
-            onClick={handleDecode}
-            type="button"
-          >
-            Decode URL
-          </button>
-          <button className="button" onClick={handleEncode} type="button">
-            Encode URL
-          </button>
-          <button
-            className="button"
-            onClick={handleExtractNextImageUrl}
-            type="button"
-          >
-            Extract Image URL
-          </button>
-          <button className="button" onClick={handleAutoDecode} type="button">
-            Auto Detect &amp; Decode
-          </button>
-          <button className="button" onClick={handleCopy} type="button">
-            Copy Result
-          </button>
-          <button
-            className="button button--ghost"
-            onClick={handleClear}
-            type="button"
-          >
-            Clear
-          </button>
-        </div>
-
-        <div className="field-group">
-          <label className="field-label" htmlFor="output">
-            Result
-          </label>
-          <textarea
-            id="output"
-            className="tool-field"
-            value={output}
-            readOnly
-            placeholder="Your converted result will appear here..."
-            spellCheck={false}
-          />
-        </div>
+        <UrlField input={input} onInputChange={setInput} />
+        <ActionsGroup
+          onDecode={handleDecode}
+          onEncode={handleEncode}
+          onExtractImageUrl={handleExtractNextImageUrl}
+          onAutoDecode={handleAutoDecode}
+          onCopy={handleCopy}
+          onClear={handleClear}
+        />
+        <UrlFieldResult output={output} />
       </section>
 
       <section className="help-card">
