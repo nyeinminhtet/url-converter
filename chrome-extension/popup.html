@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL Encoder & Decoder</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup">
+      <header class="popup__header">
+        <div>
+          <p class="eyebrow">Utility</p>
+          <h1>URL Encoder &amp; Decoder</h1>
+        </div>
+        <span class="badge">MV3</span>
+      </header>
+
+      <section class="panel">
+        <label class="field-label" for="inputText">Input</label>
+        <textarea
+          id="inputText"
+          class="url-field"
+          placeholder="Paste a URL or encoded string here..."
+          spellcheck="false"
+        ></textarea>
+      </section>
+
+      <section class="actions">
+        <button id="decodeBtn" class="button button--primary" type="button">Decode URL</button>
+        <button id="encodeBtn" class="button" type="button">Encode URL</button>
+        <button id="autoBtn" class="button" type="button">Auto Detect &amp; Decode</button>
+        <button id="copyBtn" class="button" type="button">Copy Result</button>
+        <button id="clearBtn" class="button button--ghost" type="button">Clear</button>
+      </section>
+
+      <section class="panel">
+        <div class="output-head">
+          <label class="field-label" for="outputText">Result</label>
+          <span id="status" class="status" aria-live="polite"></span>
+        </div>
+        <textarea
+          id="outputText"
+          class="url-field url-field--output"
+          placeholder="Converted result will appear here..."
+          readonly
+          spellcheck="false"
+        ></textarea>
+      </section>
+
+      <section class="help">
+        <p class="help__title">Quick help</p>
+        <ul>
+          <li><code>%3A</code> → <code>:</code></li>
+          <li><code>%2F</code> → <code>/</code></li>
+          <li><code>%20</code> → <code>space</code></li>
+        </ul>
+      </section>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

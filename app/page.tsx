@@ -1,65 +1,214 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+
+type StatusType = "idle" | "success" | "error";
+
+const examples = [
+  { encoded: "%3A", decoded: ":" },
+  { encoded: "%2F", decoded: "/" },
+  { encoded: "%20", decoded: "space" },
+];
 
 export default function Home() {
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+  const [status, setStatus] = useState("");
+  const [statusType, setStatusType] = useState<StatusType>("idle");
+
+  function showStatus(message: string, type: StatusType) {
+    setStatus(message);
+    setStatusType(type);
+  }
+
+  function requireInput() {
+    const value = input.trim();
+
+    if (!value) {
+      setOutput("");
+      showStatus("Enter a URL or encoded string first.", "error");
+      return null;
+    }
+
+    return value;
+  }
+
+  function handleEncode() {
+    const value = requireInput();
+
+    if (!value) {
+      return;
+    }
+
+    setOutput(encodeURIComponent(value));
+    showStatus("URL encoded successfully.", "success");
+  }
+
+  function handleDecode() {
+    const value = requireInput();
+
+    if (!value) {
+      return;
+    }
+
+    try {
+      setOutput(decodeURIComponent(value));
+      showStatus("URL decoded successfully.", "success");
+    } catch {
+      setOutput("");
+      showStatus(
+        "That input cannot be decoded with decodeURIComponent().",
+        "error",
+      );
+    }
+  }
+
+  function handleAutoDecode() {
+    const value = requireInput();
+
+    if (!value) {
+      return;
+    }
+
+    if (!value.includes("%")) {
+      setOutput(value);
+      showStatus("No percent-encoded segments were detected.", "error");
+      return;
+    }
+
+    try {
+      setOutput(decodeURIComponent(value));
+      showStatus("Encoded text detected and decoded.", "success");
+    } catch {
+      setOutput("");
+      showStatus("Encoded text was detected, but decoding failed.", "error");
+    }
+  }
+
+  async function handleCopy() {
+    const value = output.trim();
+
+    if (!value) {
+      showStatus("There is no result to copy yet.", "error");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(value);
+      showStatus("Result copied to clipboard.", "success");
+    } catch {
+      showStatus("Clipboard access failed in this browser.", "error");
+    }
+  }
+
+  function handleClear() {
+    setInput("");
+    setOutput("");
+    setStatus("");
+    setStatusType("idle");
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="tool-shell">
+      <section className="hero">
+        <div className="hero__copy">
+          <h1>URL Encoder &amp; Decoder</h1>
+          <p className="hero__lede">
+            Encode clean URLs for query strings, decode unreadable
+            percent-encoded text, and copy the result instantly from one page.
           </p>
+          <div className="hero__chips">
+            <span>Manifest V3 extension included</span>
+            <span>Fast clipboard workflow</span>
+            <span>Developer-tool style UI</span>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+        <div className="hero__card">
+          <div className="panel">
+            <div className="panel__heading">
+              <span className="panel__label">Input</span>
+              <span className="panel__hint">
+                Paste a full URL or encoded value
+              </span>
+            </div>
+            <textarea
+              className="tool-field"
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              placeholder="https%3A%2F%2Fexample.com%2Fdocs%3Fsearch%3Dhello%2520world"
+              spellCheck={false}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+
+          <div className="tool-actions">
+            <button
+              className="action action--primary"
+              onClick={handleDecode}
+              type="button"
+            >
+              Decode URL
+            </button>
+            <button className="action" onClick={handleEncode} type="button">
+              Encode URL
+            </button>
+            <button className="action" onClick={handleAutoDecode} type="button">
+              Auto Detect &amp; Decode
+            </button>
+            <button className="action" onClick={handleCopy} type="button">
+              Copy Result
+            </button>
+            <button
+              className="action action--ghost"
+              onClick={handleClear}
+              type="button"
+            >
+              Clear
+            </button>
+          </div>
+
+          <div className="panel">
+            <div className="panel__heading">
+              <span className="panel__label">Result</span>
+              <span className={`status status--${statusType}`}>{status}</span>
+            </div>
+            <textarea
+              className="tool-field tool-field--output"
+              value={output}
+              readOnly
+              placeholder="Your converted value will appear here."
+              spellCheck={false}
+            />
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <section className="info-grid">
+        <article className="info-card">
+          <h2>Examples</h2>
+          <ul className="example-list">
+            {examples.map((example) => (
+              <li key={example.encoded}>
+                <code>{example.encoded}</code>
+                <span>{example.decoded}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+
+        <article className="info-card">
+          <h2>How to use it</h2>
+          <p>
+            Use <strong>Encode URL</strong> when you need safe query-string or
+            path values. Use <strong>Decode URL</strong> when a link looks
+            unreadable because of percent encoding.
+          </p>
+        </article>
+      </section>
+
+      <footer className="site-footer">
+        <p>© 2026 URL Encoder &amp; Decoder Tool. All rights reserved.</p>
+      </footer>
+    </main>
   );
 }

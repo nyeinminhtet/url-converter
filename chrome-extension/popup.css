@@ -1,0 +1,211 @@
+:root {
+  color-scheme: light;
+  --bg: #eef3f8;
+  --panel: rgba(255, 255, 255, 0.95);
+  --panel-border: rgba(15, 23, 42, 0.08);
+  --text: #172033;
+  --muted: #667085;
+  --accent: #1565c0;
+  --accent-strong: #0f4f98;
+  --success: #0f9d58;
+  --error: #c62828;
+  --shadow: 0 14px 32px rgba(18, 38, 63, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 500px;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(21, 101, 192, 0.12),
+      transparent 38%
+    ),
+    linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
+  color: var(--text);
+  font-family: "Segoe UI", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+}
+
+.popup {
+  width: 500px;
+  padding: 18px;
+}
+
+.popup__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.popup__header h1 {
+  margin: 2px 0 0;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(21, 101, 192, 0.1);
+  color: var(--accent-strong);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.panel,
+.help {
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.panel {
+  padding: 12px;
+}
+
+.field-label {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.url-field {
+  width: 100%;
+  min-height: 112px;
+  resize: vertical;
+  padding: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 12px;
+  background: #fcfdff;
+  color: var(--text);
+  font:
+    13px/1.5 "SFMono-Regular",
+    "Cascadia Code",
+    "Consolas",
+    "Liberation Mono",
+    monospace;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.url-field:focus {
+  outline: none;
+  border-color: rgba(21, 101, 192, 0.5);
+  box-shadow: 0 0 0 4px rgba(21, 101, 192, 0.12);
+}
+
+.url-field--output {
+  min-height: 118px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.button {
+  appearance: none;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #ffffff;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(18, 38, 63, 0.08);
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    background-color 120ms ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(18, 38, 63, 0.12);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.button--primary {
+  border-color: transparent;
+  background: linear-gradient(180deg, #1f78d1 0%, var(--accent) 100%);
+  color: #ffffff;
+}
+
+.button--ghost {
+  background: #f7f9fc;
+}
+
+.output-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.status {
+  min-height: 18px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.status.is-success {
+  color: var(--success);
+}
+
+.status.is-error {
+  color: var(--error);
+}
+
+.help {
+  margin-top: 14px;
+  padding: 12px 14px;
+}
+
+.help__title {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.help ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.help code {
+  font:
+    12px/1.4 "SFMono-Regular",
+    "Cascadia Code",
+    "Consolas",
+    monospace;
+}
