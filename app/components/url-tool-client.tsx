@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import UrlField from "./components/url-field";
-import ActionsGroup from "./components/actions-group";
-import UrlFieldResult from "./components/url-field-result";
+
+import UrlField from "./url-field";
+import ActionsGroup from "./actions-group";
+import UrlFieldResult from "./url-field-result";
 
 type StatusType = "idle" | "success" | "error";
 
